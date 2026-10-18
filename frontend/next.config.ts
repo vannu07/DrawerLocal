@@ -1,7 +1,5 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* Next.js 16 configuration */
-};
+const nextConfig: NextConfig = {};
 
 export default nextConfig;

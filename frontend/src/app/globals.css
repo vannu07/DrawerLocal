@@ -10,6 +10,12 @@
   --accent-cyan: #06b6d4;
 }
 
+svg {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: 100%;
+}
+
 body {
   background-color: #090a0f;
   color: #f4f4f5;
