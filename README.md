@@ -83,13 +83,12 @@ The frontend is built with **Next.js 15 (Turbopack)** and optimized for instanta
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvannu07%2FDrawerLocal)
 
 ### Step-by-Step Vercel Setup:
-1. Go to [vercel.com/new](https://vercel.com/new) and select **`vannu07/DrawerLocal`**.
-2. In **Project Settings**:
-   - If importing from root: Vercel automatically reads the included [vercel.json](vercel.json).
-   - Alternatively, set **Root Directory** to `frontend`.
-3. (Optional) Set Environment Variables:
-   - `NEXT_PUBLIC_API_URL`: Your deployed FastAPI backend URL (e.g. `https://drawerlocal-api.onrender.com/api/v1`). If omitted, the dashboard runs in interactive demo mode.
-4. Click **Deploy** — builds in under 30 seconds with 0 errors!
+1. Go to [vercel.com/new](https://vercel.com/new) and click **Import** next to **`vannu07/DrawerLocal`**.
+2. **Crucial Setting**: Next to **Root Directory: `./`**, click **Edit** and choose **`frontend`** (this points Vercel directly to the Next.js app).
+3. Leave **Framework Preset** as **Next.js** (automatically detected).
+4. (Optional) Set Environment Variables:
+   - `NEXT_PUBLIC_API_URL`: Your deployed FastAPI backend URL (e.g. `https://drawerlocal-api.onrender.com/api/v1`). If omitted, the dashboard runs in interactive demo mode with zero errors.
+5. Click **Deploy** — builds and goes live in ~30 seconds!
 
 ---
 
