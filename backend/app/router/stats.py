@@ -1,16 +1,14 @@
-from fastapi import APIRouter
-from sqlmodel import Session, select
+from fastapi import APIRouter, Depends
+from sqlmodel import Session, select, create_engine
 from datetime import datetime, date
 from typing import List
 
 from ..models import Document
 from ..schemas import DocumentRead
+from ..config import settings
 
 router = APIRouter()
 
-# Dependency to get DB session (reuse same as documents)
-from sqlmodel import create_engine
-from ..config import settings
 engine = create_engine(settings.DATABASE_URL, echo=False)
 
 def get_session():
@@ -18,7 +16,7 @@ def get_session():
         yield session
 
 @router.get("/stats/summary")
-def get_summary(session: Session = next(get_session())):
+def get_summary(session: Session = Depends(get_session)):
     stmt = select(Document).where(Document.status == "approved")
     docs: List[Document] = session.exec(stmt).all()
     total = sum(d.total or 0 for d in docs)
@@ -27,7 +25,7 @@ def get_summary(session: Session = next(get_session())):
     return {"total": total, "tax": tax, "subtotal": subtotal, "count": len(docs)}
 
 @router.get("/stats/by-category")
-def by_category(session: Session = next(get_session())):
+def by_category(session: Session = Depends(get_session)):
     stmt = select(Document).where(Document.status == "approved")
     docs = session.exec(stmt).all()
     result = {}
@@ -38,7 +36,7 @@ def by_category(session: Session = next(get_session())):
     return result
 
 @router.get("/stats/timeline")
-def timeline(session: Session = next(get_session())):
+def timeline(session: Session = Depends(get_session)):
     stmt = select(Document).where(Document.status == "approved")
     docs = session.exec(stmt).all()
     timeline = {}

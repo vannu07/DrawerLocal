@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import List
 
-import fitz  # PyMuPDF
+import pymupdf as fitz
 from sqlmodel import Session, select
 
 from ..config import settings

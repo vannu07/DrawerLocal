@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Optional, Dict
 from sqlmodel import SQLModel, Field
+from sqlalchemy import Column, JSON
 
 class Document(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -14,8 +15,8 @@ class Document(SQLModel, table=True):
     tax: Optional[float] = None
     total: Optional[float] = None
     category: Optional[str] = None
-    confidence: Optional[Dict[str, float]] = Field(default_factory=dict)  # per-field confidence
-    raw_model_output: Optional[dict] = None
+    confidence: Optional[Dict[str, float]] = Field(default_factory=dict, sa_column=Column(JSON))
+    raw_model_output: Optional[dict] = Field(default=None, sa_column=Column(JSON))
     created_at: datetime = Field(default_factory=datetime.utcnow)
     approved_at: Optional[datetime] = None
 

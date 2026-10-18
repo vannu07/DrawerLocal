@@ -1,9 +1,24 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlmodel import SQLModel, create_engine
+
 from .router import documents, stats, health
 from .config import settings
 
-app = FastAPI(title="DrawerLocal API", version="0.1.0")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Initialize SQLite database and tables
+    engine = create_engine(settings.DATABASE_URL, echo=False)
+    SQLModel.metadata.create_all(engine)
+    yield
+
+app = FastAPI(
+    title="DrawerLocal API",
+    version="0.1.0",
+    description="Offline-first receipt extraction with open-weight AI",
+    lifespan=lifespan,
+)
 
 # CORS configuration
 app.add_middleware(
