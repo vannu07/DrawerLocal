@@ -1,6 +1,6 @@
 # DrawerLocal
 
-![DrawerLocal hero](file:///C:/Users/Lenovo/.gemini/antigravity-ide/brain/514413fa-29bb-4a77-a5d6-1adfa3773c8b/drawerlocal_hero_1792312277153.jpg)
+![DrawerLocal hero](drawerlocal_hero.jpg)
 
 **DrawerLocal** – a premium, privacy‑first receipt‑sorting side‑hustle built on open‑weight AI. Upload your receipts (JPG/PNG/PDF), let an **open‑weight vision model** (Gemma 3 via Ollama or a deterministic mock) extract structured data, review & correct low‑confidence fields, and export CSV or printable tax summaries.
 
