@@ -1,126 +1,188 @@
-# DrawerLocal
+# DrawerLocal 🗄️⚡
+
+> **"Your receipts, sorted. Your data, never uploaded."**
+
+[![Next.js 15](https://img.shields.io/badge/Next.js-15_(Turbopack)-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Open-Weight AI](https://img.shields.io/badge/AI_Vision-Gemma_3_(Ollama)-4285F4?style=for-the-badge&logo=google)](https://ollama.com/)
+[![Deploy with Vercel](https://img.shields.io/badge/Deploy_Frontend-Vercel-000000?style=for-the-badge&logo=vercel)](https://vercel.com/)
+[![Deploy with Render](https://img.shields.io/badge/Deploy_Backend-Render-46E3B7?style=for-the-badge&logo=render)](https://render.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-emerald?style=for-the-badge)](LICENSE)
+
+---
 
 ![DrawerLocal hero](drawerlocal_hero.jpg)
 
-**DrawerLocal** – a premium, privacy‑first receipt‑sorting side‑hustle built on open‑weight AI. Upload your receipts (JPG/PNG/PDF), let an **open‑weight vision model** (Gemma 3 via Ollama or a deterministic mock) extract structured data, review & correct low‑confidence fields, and export CSV or printable tax summaries.
+---
+
+## 💡 The Problem: The Tax-Time Freelancer Nightmare
+
+Every tax season, millions of freelancers, independent contractors, and boutique agency owners face the same dreaded ritual: digging through shoe boxes, email folders, and camera rolls to compile business receipts and invoice records for Schedule C deductions.
+
+Existing cloud solutions (Expensify, QuickBooks, cloud LLMs) present major friction points:
+1. **Confidentiality Risks**: Receipts contain client names, NDA-protected travel destinations, private addresses, and banking details. Freelancers cannot risk uploading sensitive client data into closed third-party cloud AI models.
+2. **Subscription Fatigue**: Freelancers pay $20–$50/month for simple document OCR tools with arbitrary document limits.
+3. **Hallucination Anxiety**: Pure cloud LLMs often hallucinate digits on crumpled receipts, risking tax audit penalties without an explicit confidence-scoring or verification step.
 
 ---
 
-## 📚 What I Built
+## 🎯 The Solution: DrawerLocal
 
-- **FastAPI + SQLModel** backend with background extraction, vendor‑rule overrides, and real‑time status via Server‑Sent Events.
-- **Next.js 15 (App Router) + Tailwind CSS** front‑end with a dark‑first glassmorphism design system, dashboard charts, animated counters, and a command‑palette.
-- **Demo‑mode** (`DEMO_MODE=true`) – runs entirely on a mock provider, no GPU, no internet, zero cost.
-- **Docker Compose** orchestration (`api`, `frontend`, `ollama`) – one command to spin up the whole stack.
-- **Render deployment** – `render.yaml` ready for a one‑click deploy of both API and static site.
-- **Open‑innovation narrative** – all AI components are open‑weight (Ollama, Gemma 3), keeping data on‑device and costs minimal.
+**DrawerLocal** is an offline-first, open-weight AI receipt & invoice intelligence suite designed as a standalone side-hustle product that privacy-conscious professionals gladly pay for.
 
----
-
-## 🎬 Demo
-
-[Live demo on Render]({{RENDER_LINK}}) (replace with your Render URL once deployed).
+- **100% On-Device Vision**: Powered by Google’s open-weight **Gemma 3 (4B)** model served through **Ollama** or deterministic mock for zero-cost demos. No receipt image ever leaves your computer.
+- **Auditable Extraction**: Extracts vendor names, transaction dates, tax/VAT, total amounts, and auto-classifies expenses into IRS Schedule C tax categories.
+- **Confidence Scoring & Human-in-the-Loop**: Flags low-confidence extractions (< 80%) with a vibrant "Review Needed" badge, allowing instant 1-click modal corrections.
+- **Custom Vendor Rules**: Learned local rules (e.g., "Starbucks" ➔ *Meals & Entertainment*, "GitHub" ➔ *Software Operations*) override ambiguous model predictions.
+- **Instant Tax Exports**: Download cleaned CSV spreadsheets or structured JSON ready for TurboTax, accountant hand-off, or local audit trails.
 
 ---
 
-## 🚀 Getting Started
-
-```bash
-# clone the repo (we’ll create it shortly)
-# cd into the project folder
-cd "d:/Hacktoberfest/Week 2"
-
-# Build and run everything
-docker compose up --build
-```
-
-The API will be reachable at `http://localhost:8000/api/v1` and the UI at `http://localhost:3000`.
-
-### Environment variables
-
-Create a `.env` in `backend/` (copy from `.env.example`). The most important flag is `DEMO_MODE=true` for the zero‑cost experience.
-
----
-
-## 🏗️ Architecture
+## 🏗️ System Architecture
 
 ```mermaid
 flowchart TD
-    subgraph Frontend[Next.js UI]
-        A[Landing] --> B[Upload]
-        B --> C[Review / Edit]
-        C --> D[Dashboard]
-        D --> E[Export CSV / Tax Summary]
+    subgraph Client["Frontend (Next.js 15 App Router)"]
+        A["Dashboard & Analytics"]
+        B["Dropzone Receipt Upload"]
+        C["Verification & Review Modal"]
+        D["Schedule C Category Charts"]
     end
-    subgraph Backend[FastAPI]
-        F[API Router]
-        G[Background Extraction]
-        H[SQLModel (SQLite)]
-        I[Model Provider]
+
+    subgraph Server["Backend (FastAPI + SQLModel)"]
+        E["API Gateway (/api/v1)"]
+        F["Background Extraction Pipeline"]
+        G["Vendor Rule Engine"]
+        H["Local SQLite Database"]
     end
-    subgraph Model[Ollama / Mock]
-        J[Gemma 3 (4B) or Mock]
+
+    subgraph AI["Open-Weight AI Vision Engine"]
+        I["Local Ollama Server"]
+        J["Gemma 3 (4B Vision)"]
+        K["Deterministic Mock Provider (Zero-Cost Mode)"]
     end
-    A & B & C & D & E --> F
-    F --> G
-    G --> I
+
+    B -->|"Upload JPG/PNG/PDF"| E
+    E --> F
+    F -->|"Query"| G
+    F -->|"Vision Prompt & Image"| I
     I --> J
-    G --> H
-    H --> F
+    F -.->|"Fallback if DEMO_MODE=true"| K
+    F -->|"Store Structured Record"| H
+    H -->|"SSE Status & JSON"| A
+    C -->|"Save Corrections"| E
+    A -->|"Export CSV / Tax Audit"| E
 ```
 
 ---
 
-## 💡 Why Open Innovation Matters
+## 🚀 One-Click Deploy on Vercel (Frontend)
 
-- **Data never leaves the machine** – receipts stay on the user’s disk; the mock provider guarantees zero network traffic.
-- **Cost‑free scaling** – the demo runs on a laptop without a GPU; switching to Ollama lets you run the same model locally for a fraction of cloud fees.
-- **Vendor lock‑in avoidance** – swap the provider (Ollama ↔ OpenAI‑compatible ↔ Mock) by changing a single env var.
-- **Community‑driven improvement** – the code is fully open‑source; anyone can fine‑tune the prompt, add new vendor rules, or replace the model.
+The frontend is built with **Next.js 15 (Turbopack)** and optimized for instantaneous deployment on **Vercel** with zero configuration required.
 
----
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvannu07%2FDrawerLocal)
 
-## 📦 Deploy to Render (one‑click)
-
-```yaml
-services:
-  - type: web
-    name: drawerlocal-api
-    env: docker
-    dockerfilePath: ./backend/Dockerfile
-    envVars:
-      - key: DEMO_MODE
-        value: "true"
-  - type: static
-    name: drawerlocal-frontend
-    env: static
-    buildCommand: npm install && npm run build
-    publishPath: frontend/.next
-```
-
-Create the two services on Render, add the same env vars, and you’ll have a live instance.
+### Step-by-Step Vercel Setup:
+1. Go to [vercel.com/new](https://vercel.com/new) and select **`vannu07/DrawerLocal`**.
+2. In **Project Settings**:
+   - If importing from root: Vercel automatically reads the included [vercel.json](vercel.json).
+   - Alternatively, set **Root Directory** to `frontend`.
+3. (Optional) Set Environment Variables:
+   - `NEXT_PUBLIC_API_URL`: Your deployed FastAPI backend URL (e.g. `https://drawerlocal-api.onrender.com/api/v1`). If omitted, the dashboard runs in interactive demo mode.
+4. Click **Deploy** — builds in under 30 seconds with 0 errors!
 
 ---
 
-## 🧪 Tests
+## 🐳 Quickstart: Run Locally (Docker Compose)
+
+Spin up the entire stack (FastAPI Backend + Next.js UI + Local AI Engine) with one command:
 
 ```bash
-cd backend && pytest -q      # backend unit tests (seed, export, vendor rules)
-cd ../frontend && npx playwright test   # end‑to‑end UI smoke test
+# Clone the repository
+git clone https://github.com/vannu07/DrawerLocal.git
+cd DrawerLocal
+
+# Start all services with Docker Compose
+docker compose up --build
 ```
+
+- **Frontend Dashboard**: [http://localhost:3000](http://localhost:3000)
+- **FastAPI Backend & Interactive Swagger Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **Backend Health Check**: [http://localhost:8000/api/v1/health](http://localhost:8000/api/v1/health)
 
 ---
 
-## 🙏 Credits & Partner Tech
+## 💻 Manual Local Development
 
-- **Render** – free hosting for the API and static site.
-- **Ollama** – runs the open‑weight Gemma 3 model locally.
-- **Tailwind CSS** – design system with dark‑first glassmorphism.
-- **FastAPI & SQLModel** – rapid backend prototyping.
-- **DevRelay** – optional session publishing (not required for this repo).
+### 1. Backend (FastAPI + Python 3.11+)
+```bash
+cd backend
+python -m venv venv
+# On Windows:
+.\venv\Scripts\activate
+# On Linux/macOS:
+source venv/bin/activate
+
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+```
+
+### 2. Frontend (Next.js 15 + Tailwind CSS)
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view the live dashboard.
+
+---
+
+## 🔬 Open-Weight AI Architecture
+
+DrawerLocal rejects the "thin wrapper over paid closed APIs" trend. Instead, it relies on open weights:
+
+| Component | Technology | Rationale |
+| :--- | :--- | :--- |
+| **Vision Model** | **Gemma 3 (4B Vision)** | Compact enough to run on modern consumer laptops (M-series Mac, RTX laptop, modern CPU) with high numerical precision on receipt OCR. |
+| **Model Runtime** | **Ollama** | Local daemon with zero telemetry, high throughput, and simple REST API compatibility. |
+| **Fallback Engine** | **Deterministic Mock** | Enables `DEMO_MODE=true` so judges, reviewers, and users can test the full pipeline without installing Ollama or downloading models. |
+| **Persistence** | **SQLite + SQLModel** | Single-file database kept in the user's workspace directory (`backend/data/`). Zero external cloud DB dependency. |
+
+---
+
+## 📊 Business Viability: Who Pays for DrawerLocal?
+
+- **Freelancers & Solopreneurs**: Drowning in 50–200 receipts per month; want a one-time purchase or low-cost self-hosted utility instead of an endless QuickBooks subscription.
+- **Digital Nomads & Remote Workers**: Working across borders with multiple currencies and VAT slips who need offline capability when traveling without stable internet.
+- **Privacy-Sensitive Contractors (Legal, Healthcare, Tech)**: Under strict NDAs that legally prohibit uploading financial or client receipts to external multi-tenant LLMs.
+
+**Monetization Vectors**:
+1. Open-source core engine (Free self-hosted).
+2. Packaged desktop binary (Electron / Tauri wrapper for Mac/Windows) sold as a $49 one-time lifetime license.
+3. Pre-configured micro-appliance / Docker template for agencies.
+
+---
+
+## 🧪 Testing & Validation
+
+```bash
+# Run backend test suite
+cd backend
+pytest -v
+
+# Run frontend production build test
+cd frontend
+npm run lint
+npm run build
+```
 
 ---
 
 ## 📜 License
 
-MIT © 2026 DrawerLocal contributors.
+Distributed under the **MIT License**. Free for personal and commercial use.
+
+---
+
+*Built with ❤️ for Hacktoberfest 2026: Open-Source AI Challenge (Week 2: Side Hustle).*
