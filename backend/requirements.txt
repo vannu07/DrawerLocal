@@ -1,0 +1,8 @@
+fastapi[all]
+uvicorn[standard]
+sqlmodel
+pydantic>=2
+python-multipart
+pymupdf
+httpx
+python-dotenv
